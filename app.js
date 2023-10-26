@@ -29,6 +29,12 @@ var verticalSpacing = canvas.width / numVerticalLines;
   
 
 function draw() {
+  layoutGenerator();
+  // exportToSVG();
+ 
+}
+
+function layoutGenerator() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   //Grid properties
   var numHorizontalLines = (ellipseHeight-1); // Adjust as needed
@@ -107,6 +113,7 @@ for (var y = horizontalSpacing; y < canvas.height; y += horizontalSpacing) {
   console.log("ellipseHeight:", ellipseHeight);
   console.log("ellipseWidth:", ellipseWidth);
 }
+
 
 function exportToSVG() {
     // Create an SVG string representing the drawing
