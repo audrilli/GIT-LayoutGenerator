@@ -96,115 +96,39 @@ function layoutGenerator() {
   console.log("ellipseHeight:", ellipseHeight);
   console.log("ellipseWidth:", ellipseWidth);
 }
-function exportToSVG() {
-  var svgString = buildSVG(); // Get the SVG string with elements
+function exportToSVG() {var svgString = buildSVG(); // Get the SVG string with elements
 
-  // Create a unique file name with a timestamp
-  var timestamp = new Date().toISOString().replace(/[:.]/g, "-");
-  var fileName = "drawing_" + timestamp + ".svg";
+// Create a unique file name with a timestamp
+var timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+var fileName = 'drawing_' + timestamp + '.svg';
 
-  // Create a download link for the SVG file
-  var blob = new Blob([svgString], { type: "image/svg+xml" });
-  var url = URL.createObjectURL(blob);
-  var a = document.createElement("a");
-  a.href = url;
-  a.download = fileName;
-  a.click();
+// Create a download link for the SVG file
+var blob = new Blob([svgString], { type: 'image/svg+xml' });
+var url = URL.createObjectURL(blob);
+var a = document.createElement('a');
+a.href = url;
+a.download = fileName;
+a.click();
 }
-function buildSVG() {
-  // Create an SVG string representing the elements
-  var svgString =
-    '<svg xmlns="http://www.w3.org/2000/svg" width="' +
-    canvas.width +
-    '" height="' +
-    canvas.height +
-    '">\n';
+function buildSVG() { // Create an SVG string representing the elements
+  var svgString = '<svg xmlns="http://www.w3.org/2000/svg" width="' + canvas.width + '" height="' + canvas.height + '">\n';
 
-  // Include grid lines and ellipse as paths
+  // Include grid lines as paths
   var horizontalSpacing = canvas.height / numHorizontalLines;
   var verticalSpacing = canvas.width / numVerticalLines;
 
   for (var x = verticalSpacing; x < canvas.width; x += verticalSpacing) {
-    svgString +=
-      '<path d="M' +
-      x +
-      " 0 L" +
-      x +
-      " " +
-      canvas.height +
-      '" stroke="' +
-      lineColor +
-      '" stroke-width="' +
-      lineWidth +
-      '" />\n';
+      svgString += '<path d="M' + x + ' 0 V' + canvas.height + '" stroke="' + lineColor + '" stroke-width="' + lineWidth + '" />\n';
   }
 
   for (var y = horizontalSpacing; y < canvas.height; y += horizontalSpacing) {
-    svgString +=
-      '<path d="M0 ' +
-      y +
-      " L" +
-      canvas.width +
-      " " +
-      y +
-      '" stroke="' +
-      lineColor +
-      '" stroke-width="' +
-      lineWidth +
-      '" />\n';
+      svgString += '<path d="M0 ' + y + ' H' + canvas.width + '" stroke="' + lineColor + '" stroke-width="' + lineWidth + '" />\n';
   }
 
-  svgString +=
-    '<path d="M' +
-    middleX +
-    " 0 L" +
-    middleX +
-    " " +
-    canvas.height +
-    '" stroke="' +
-    lineColor +
-    '" stroke-width="' +
-    lineWidth +
-    '" />\n';
-  svgString +=
-    '<path d="M0 ' +
-    middleY +
-    " L" +
-    canvas.width +
-    " " +
-    middleY +
-    '" stroke="' +
-    lineColor +
-    '" stroke-width="' +
-    lineWidth +
-    '" />\n';
+  // Include ellipse as a path
+  svgString += '<path d="M' + middleX + ' ' + middleY + ' m-' + majorRadius + ',0 a' + majorRadius + ',' + minorRadius + ' 0 1,0 ' + 2 * majorRadius + ',0 a' + majorRadius + ',' + minorRadius + ' 0 1,0 -' + 2 * majorRadius + ',0" fill="' + ellipseFillColor + '" stroke="' + ellipseStrokeColor + '" stroke-width="2" />\n';
 
-  svgString +=
-    '<path d="M' +
-    middleX +
-    " " +
-    middleY +
-    " m-" +
-    majorRadius +
-    ",0 a" +
-    majorRadius +
-    "," +
-    minorRadius +
-    " 0 1,0 " +
-    2 * majorRadius +
-    ",0 a" +
-    majorRadius +
-    "," +
-    minorRadius +
-    " 0 1,0 -" +
-    2 * majorRadius +
-    ',0" fill="' +
-    ellipseFillColor +
-    '" stroke="' +
-    ellipseStrokeColor +
-    '" stroke-width="2" />\n';
-
-  svgString += "</svg";
+  svgString += '</svg';
 
   return svgString;
 }
