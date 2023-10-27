@@ -6,7 +6,7 @@ var ctx = canvas.getContext("2d");
 var lineWidth = 1; // Width of the line
 var lineColor = "0000"; // Color of the line
 var ellipseColor = "#fffff";
-var ellipseFillColor = "0000";
+var ellipseFillColor = "#fffff";
 var ellipseStrokeColor = "0000";
 
 //Ellipse properties
@@ -24,8 +24,8 @@ var minorRadius = ellipseHeight / 2;
 var middleX = canvas.width / 2;
 var middleY = canvas.height / 2;
 //Grid properties
-var numHorizontalLines = ellipseHeight - 1; // Adjust as needed
-var numVerticalLines = ellipseHeight - 1; // Adjust as needed
+var numHorizontalLines = majorRadius - 1; // Adjust as needed
+var numVerticalLines = majorRadius - 1; // Adjust as needed
 var horizontalSpacing = canvas.height / numHorizontalLines;
 var verticalSpacing = canvas.width / numVerticalLines;
 
@@ -43,8 +43,8 @@ function layoutGenerator() {
 
   lineData = []; // Clear the line data
   //Grid properties
-  var numHorizontalLines = ellipseHeight - 1; // Adjust as needed
-  var numVerticalLines = ellipseHeight - 1; // Adjust as needed
+  var numHorizontalLines = majorRadius - 1; // Adjust as needed
+  var numVerticalLines = majorRadius - 1; // Adjust as needed
   var horizontalSpacing = canvas.height / numHorizontalLines;
   var verticalSpacing = canvas.width / numVerticalLines;
 
@@ -127,12 +127,12 @@ function buildSVG() {  // Create an SVG string representing the elements
 }
 
 canvas.addEventListener("click", function () {
-  ellipseWidth += 1; // Increase major radius by 5 pixels
-  ellipseHeight += 1; // Increase minor radius by 5 pixels
+  majorRadius += 1; // Increase major radius by 1 pixels
+  minorRadius += 1; // Increase minor radius by 1 pixels
   draw();
   
 });
 document.getElementById("exportButton").addEventListener("click", exportToSVG);
 draw();
-exportToSVG();
+
 console.log("done");
