@@ -6,41 +6,85 @@ if (app.documents.length > 0) {
 
   // Loop through all the pages in the document
   for (var i = 0; i < doc.pages.length; i++) {
-
     var page = doc.pages[i];
-//Diameter
-    
-   
 
     // Calculate the middle of the page
     var middleX = page.bounds[1] + (page.bounds[3] - page.bounds[1]) / 2;
     var middleY = page.bounds[0] + (page.bounds[2] - page.bounds[0]) / 2;
 
-  
+    // Add a circle to the middle of the page
+    var circle = page.ovals.add(undefined, undefined);
+    circle.geometricBounds = [
+      middleY - diameter / 2,
+      middleX - diameter / 2,
+      middleY + diameter / 2,
+      middleX + diameter / 2,
+    ];
+    diameter += 1;
 
-  // Add a circle to the middle of the page
-  var circle = page.ovals.add(undefined, undefined);
-  circle.geometricBounds = [
-    middleY - diameter / 2,
-    middleX - diameter / 2,
-    middleY + diameter / 2,
-    middleX + diameter / 2,
-  ];
-  diameter += 1;
-  
-	doc.pages.item(i).guides.add({location:middleY, orientation:HorizontalOrVertical.horizontal});
-  doc.pages.item(i).guides.add({location:(middleY-(diameter)/2), orientation:HorizontalOrVertical.horizontal});
-	
+    //horizontal guides
+    doc.pages
+      .item(i)
+      .guides.add({
+        location: middleY,
+        orientation: HorizontalOrVertical.horizontal,
+      });
+    doc.pages
+      .item(i)
+      .guides.add({
+        location: middleY - diameter / 2,
+        orientation: HorizontalOrVertical.horizontal,
+      });
+    doc.pages
+      .item(i)
+      .guides.add({
+        location: middleY + diameter / 2,
+        orientation: HorizontalOrVertical.horizontal,
+      });
 
-    
-    // Add a guide at the middle of the page
-    var guideX = page.guides.add(undefined,undefined);
-    guideX.location = middleX;
+    //vertical guides
+    doc.pages
+      .item(i)
+      .guides.add({
+        location: middleX,
+        orientation: HorizontalOrVertical.vertical,
+      });
+    doc.pages
+      .item(i)
+      .guides.add({
+        location: middleX - diameter / 2,
+        orientation: HorizontalOrVertical.vertical,
+      });
+    doc.pages
+      .item(i)
+      .guides.add({
+        location: middleX + diameter / 2,
+        orientation: HorizontalOrVertical.vertical,
+      });
 
-    
+    // Grid
+    MyGrid();
   }
 } else {
   alert(
     "No open document found. Please open a document before running this script."
   );
+}
+function MyGrid(){
+  //calculate the marigns of the page
+  var gutterWidth = diameter;
+
+  var leftMargin = page.marginPreferences.left;
+    var rightMargin = page.marginPreferences.right;
+
+     // Calculate the number of guides based on the gutter width
+     var numberOfGuides = Math.floor((page.bounds[3] - leftMargin - rightMargin) / gutterWidth);
+ // Calculate the starting position for the first guide
+ var startX = page.bounds[1] + leftMargin + (gutterWidth / 2);
+
+ // Add vertical guides with the specified gutter
+ for (var j = 0; j < numberOfGuides; j++) {
+   var guide = page.guides.add(undefined, undefined);
+   guide.location = startX + j * gutterWidth;
+ }
 }
