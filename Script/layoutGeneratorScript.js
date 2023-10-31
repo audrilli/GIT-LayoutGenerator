@@ -93,11 +93,11 @@ function MyGrid() {
     });
   }
   //Add horizontal guides with specified gutter
-  for (var k = 0; k < numHorizontalGuides; k++) {
-    doc.pages.item(i).guides.add({
-      location: startY + k * gutterWidth,
-      orientation: HorizontalOrVertical.horizontal,
-    });
-  }
+  // for (var k = 0; k < numHorizontalGuides; k++) {
+  //   doc.pages.item(i).guides.add({
+  //     location: startY + k * gutterWidth,
+  //     orientation: HorizontalOrVertical.horizontal,
+  //   });
+  // }
 }
 
