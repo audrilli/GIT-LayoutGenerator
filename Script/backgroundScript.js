@@ -45,36 +45,50 @@ if (app.documents.length > 0) {
     var oddPageSquareHeight = doc.documentPreferences.pageHeight + (1 * doc.documentPreferences.documentBleedTopOffset);
   
     // Define the CMYK fill color values for the squares
-    var cmykColorEven = [0, 0, 0, 100]; // Black color in CMYK for even pages
-    var cmykColorOdd = [0, 100, 100, 0]; // 100% Magenta, 100% Yellow in CMYK for odd pages
+    var initialCmykColor = [0, 0, 0, 100]; // Black color in CMYK
+    var finalCmykColor = [0, 0, 0, 0];    // White color in CMYK
   
     // Create color swatches for the colors
-    var fillColorEven = doc.colors.add();
-    fillColorEven.model = ColorModel.process;
-    fillColorEven.space = ColorSpace.CMYK;
-    fillColorEven.colorValue = cmykColorEven;
+    var initialFillColor = doc.colors.add();
+    initialFillColor.model = ColorModel.process;
+    initialFillColor.space = ColorSpace.CMYK;
+    initialFillColor.colorValue = initialCmykColor;
   
-    var fillColorOdd = doc.colors.add();
-    fillColorOdd.model = ColorModel.process;
-    fillColorOdd.space = ColorSpace.CMYK;
-    fillColorOdd.colorValue = cmykColorOdd;
+  
+    // var fillColorOdd = doc.colors.add();
+    // fillColorOdd.model = ColorModel.process;
+    // fillColorOdd.space = ColorSpace.CMYK;
+    // fillColorOdd.colorValue = cmykColorOdd;
   
     // Loop through all the pages in the document
     for (var i = 0; i < doc.pages.length; i++) {
       var page = doc.pages[i];
+
+      // Calculate the fill color by interpolating between initial and final colors
+    var interpolationFactor = i / (doc.pages.length - 1);
+    var cmykColor = [];
+    for (var j = 0; j < 4; j++) {
+      cmykColor[j] = initialCmykColor[j] + (finalCmykColor[j] - initialCmykColor[j]) * interpolationFactor;
+    }
+
+    // Create a color swatch for the calculated color
+    var fillColor = doc.colors.add();
+    fillColor.model = ColorModel.process;
+    fillColor.space = ColorSpace.CMYK;
+    fillColor.colorValue = cmykColor;
   
       // Create a rectangle based on whether the page number is even or odd
       var square = page.rectangles.add();
       if (i % 2 === 0) {
         // odd page, use evenPageSquareSize and evenPageFillColor
         square.geometricBounds = [0-doc.documentPreferences.documentBleedTopOffset,0, evenPageSquareHeight, evenPageSquareWidth];
-        square.fillColor = fillColorEven;
+        square.fillColor = fillColor;
       } else {
         // even page, use oddPageSquareSize and oddPageFillColor
         square.geometricBounds = [0-doc.documentPreferences.documentBleedInsideOrLeftOffset, 0-doc.documentPreferences.documentBleedTopOffset, oddPageSquareHeight, oddPageSquareWidth];
-        square.fillColor = fillColorEven;
+        square.fillColor = fillColor;
       }
-      square.fillTint = 100-(i/100); // Solid fill
+      square.fillTint = 100 // Solid fill
   
       // Send the square to the back of the stacking order
     //   square.move(LocationOptions.atBeginning);
