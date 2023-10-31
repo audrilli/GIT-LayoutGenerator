@@ -65,32 +65,40 @@ function MyGrid() {
   var leftMargin = page.marginPreferences.left;
   var rightMargin = page.marginPreferences.right;
 
-  var topMargin = page.marginPreferences.top;
-  var bottomMargin = page.marginPreferences.bottom;
+  // var topMargin = page.marginPreferences.top;
+  // var bottomMargin = page.marginPreferences.bottom;
   
 
   // Calculate the number of guides based on the gutter width
-  var numberOfGuides = Math.floor(
-    (page.bounds[3] - leftMargin - rightMargin) / gutterWidth
-  );
-  var numHorizontalGuides = Math.floor(
-    (page.bounds[2] - topMargin - bottomMargin) / gutterWidth
-  );
+  var numberOfGuides = Math.floor((page.bounds[3] - leftMargin - rightMargin) / gutterWidth);
+
+  // var numHorizontalGuides = Math.floor(
+  //   (page.bounds[2] - topMargin - bottomMargin) / gutterWidth
+  // );
   // alert(numHorizontalGuides);
   
 
   // Calculate the starting position for the first guide
   var startX = page.bounds[1] + leftMargin;
-  +(gutterWidth / 2);
-  var startY = page.bounds[0] + topMargin + gutterWidth / 2;
+  var endX = page.bounds[1] + page.bounds[3] - rightMargin;
+  // var startY = page.bounds[0] + topMargin + gutterWidth / 2;
   // alert(startY);
 
+  // Add the first guide on the margin
+  var firstGuide = page.guides.add(undefined, undefined);
+  firstGuide.location = startX;
+
+  // Add the last guide on the margin
+  var lastGuide = page.guides.add(undefined, undefined);
+  lastGuide.location = endX;
+
+  // Calculate the spacing between the remaining guides
+  var spacing = (endX - startX) / (numberOfGuides - 1);
+
   // Add vertical guides with the specified gutter
-  for (var j = 0; j < numberOfGuides; j++) {
-    doc.pages.item(i).guides.add({
-      location: startX + j * gutterWidth,
-      orientation: HorizontalOrVertical.vertical,
-    });
+  for (var j = 1; j < numberOfGuides - 1; j++) {
+    var guide = page.guides.add(undefined, undefined);
+    guide.location = startX + j * spacing;
   }
   //Add horizontal guides with specified gutter
   // for (var k = 0; k < numHorizontalGuides; k++) {
