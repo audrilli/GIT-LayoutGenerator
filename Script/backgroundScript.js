@@ -88,6 +88,7 @@ if (app.documents.length > 0) {
         // even page, use oddPageSquareSize and oddPageFillColor
         square.geometricBounds = [0-doc.documentPreferences.documentBleedInsideOrLeftOffset, 0-doc.documentPreferences.documentBleedTopOffset, oddPageSquareHeight, oddPageSquareWidth];
         square.fillColor = fillColor;
+        square.strokeWeight = 0; // No stroke
       }
       square.fillTint = 100 // Solid fill
   

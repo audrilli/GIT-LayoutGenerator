@@ -4,6 +4,16 @@ if (app.documents.length > 0) {
   var doc = app.activeDocument;
   var diameter = 10;
 
+  // Define the CMYK fill color values for the squares
+  var initialCmykColor = [0, 0, 0, 0]; // Black color in CMYK
+  var finalCmykColor = [0, 0, 0, 100];    // White color in CMYK
+
+  // Create color swatches for the colors
+  var initialFillColor = doc.colors.add();
+  initialFillColor.model = ColorModel.process;
+  initialFillColor.space = ColorSpace.CMYK;
+  initialFillColor.colorValue = initialCmykColor;
+
   // Loop through all the pages in the document
   for (var i = 0; i < doc.pages.length; i++) {
     var page = doc.pages[i];
@@ -11,6 +21,19 @@ if (app.documents.length > 0) {
     // Calculate the middle of the page
     var middleX = page.bounds[1] + (page.bounds[3] - page.bounds[1]) / 2;
     var middleY = page.bounds[0] + (page.bounds[2] - page.bounds[0]) / 2;
+
+    // Calculate the fill color by interpolating between initial and final colors
+    var interpolationFactor = i / (doc.pages.length - 1);
+    var cmykColor = [];
+    for (var j = 0; j < 4; j++) {
+      cmykColor[j] = initialCmykColor[j] + (finalCmykColor[j] - initialCmykColor[j]) * interpolationFactor;
+    }
+
+    // Create a color swatch for the calculated color
+    var fillColor = doc.colors.add();
+    fillColor.model = ColorModel.process;
+    fillColor.space = ColorSpace.CMYK;
+    fillColor.colorValue = cmykColor;
 
     // Add a circle to the middle of the page
     var circle = page.ovals.add(undefined, undefined);
@@ -20,6 +43,8 @@ if (app.documents.length > 0) {
       middleY + diameter / 2,
       middleX + diameter / 2,
     ];
+    circle.fillColor = fillColor;
+    circle.strokeWeight = 0;
     diameter += 1;
 
     //horizontal guides
