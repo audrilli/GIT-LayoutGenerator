@@ -83,6 +83,7 @@ if (app.documents.length > 0) {
         // odd page, use evenPageSquareSize and evenPageFillColor
         square.geometricBounds = [0-doc.documentPreferences.documentBleedTopOffset,0, evenPageSquareHeight, evenPageSquareWidth];
         square.fillColor = fillColor;
+        square.strokeWeight = 0; // No stroke
       } else {
         // even page, use oddPageSquareSize and oddPageFillColor
         square.geometricBounds = [0-doc.documentPreferences.documentBleedInsideOrLeftOffset, 0-doc.documentPreferences.documentBleedTopOffset, oddPageSquareHeight, oddPageSquareWidth];
