@@ -2,7 +2,7 @@
 
 if (app.documents.length > 0) {
   var doc = app.activeDocument;
-  var diameter = 10;
+  var diameter = 1;
 
   // Define the CMYK fill color values for the squares
   var initialCmykColor = [0, 0, 0, 0]; // Black color in CMYK
